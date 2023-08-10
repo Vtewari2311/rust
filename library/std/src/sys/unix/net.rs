@@ -75,6 +75,7 @@ impl Socket {
                     target_os = "dragonfly",
                     target_os = "freebsd",
                     target_os = "illumos",
+                    target_os = "hurd",
                     target_os = "linux",
                     target_os = "netbsd",
                     target_os = "openbsd",
@@ -114,6 +115,7 @@ impl Socket {
                     target_os = "freebsd",
                     target_os = "illumos",
                     target_os = "linux",
+                    target_os = "hurd",
                     target_os = "netbsd",
                     target_os = "openbsd",
                     target_os = "nto",
@@ -220,6 +222,7 @@ impl Socket {
                 target_os = "freebsd",
                 target_os = "illumos",
                 target_os = "linux",
+                target_os = "hurd",
                 target_os = "netbsd",
                 target_os = "openbsd",
             ))] {
@@ -307,7 +310,7 @@ impl Socket {
         self.recv_from_with_flags(buf, 0)
     }
 
-    #[cfg(any(target_os = "android", target_os = "linux"))]
+    #[cfg(any(target_os = "android", target_os = "linux", target_os = "hurd"))]
     pub fn recv_msg(&self, msg: &mut libc::msghdr) -> io::Result<usize> {
         let n = cvt(unsafe { libc::recvmsg(self.as_raw_fd(), msg, libc::MSG_CMSG_CLOEXEC) })?;
         Ok(n as usize)

@@ -83,7 +83,7 @@ pub unsafe fn init(argc: isize, argv: *const *const u8, sigpipe: u8) {
         #[cfg(not(any(
             miri,
             target_os = "emscripten",
-            target_os = "fuchsia",
+            target_os = "fuchsia", 
             target_os = "vxworks",
             // The poll on Darwin doesn't set POLLNVAL for closed fds.
             target_os = "macos",

@@ -3,6 +3,8 @@ mod tests;
 
 use crate::cmp;
 use crate::fmt;
+use libc::IPV6_ADD_MEMBERSHIP;
+use libc::IPV6_DROP_MEMBERSHIP;
 use crate::io::{self, BorrowedCursor, ErrorKind, IoSlice, IoSliceMut};
 use crate::mem;
 use crate::net::{Ipv4Addr, Ipv6Addr, Shutdown, SocketAddr};
@@ -20,11 +22,25 @@ cfg_if::cfg_if! {
         target_os = "dragonfly", target_os = "freebsd",
         target_os = "ios", target_os = "tvos", target_os = "macos", target_os = "watchos",
         target_os = "openbsd", target_os = "netbsd", target_os = "illumos",
-        target_os = "solaris", target_os = "haiku", target_os = "l4re", target_os = "nto"))] {
+        target_os = "solaris", target_os = "haiku", target_os = "l4re"))] {
         use crate::sys::net::netc::IPV6_JOIN_GROUP as IPV6_ADD_MEMBERSHIP;
-        use crate::sys::net::netc::IPV6_LEAVE_GROUP as IPV6_DROP_MEMBERSHIP;
-    } else {
+        #[cfg(any(target_os = "dragonfly", target_os = "freebsd",
+        target_os = "ios", target_os = "macos",
+        target_os = "openbsd", target_os = "netbsd",
+        target_os = "solaris", target_os = "haiku", target_os = "l4re",
+        target_os = "gnu"))]
         use crate::sys::net::netc::IPV6_ADD_MEMBERSHIP;
+        #[cfg(any(target_os = "dragonfly", target_os = "freebsd",
+        target_os = "ios", target_os = "macos",
+        target_os = "openbsd", target_os = "netbsd",
+        target_os = "solaris", target_os = "haiku", target_os = "l4re",
+        target_os = "gnu"))]
+        use crate::sys::net::netc::IPV6_LEAVE_GROUP as IPV6_DROP_MEMBERSHIP;
+        #[cfg(not(any(target_os = "dragonfly", target_os = "freebsd",
+        target_os = "ios", target_os = "macos",
+        target_os = "openbsd", target_os = "netbsd",
+        target_os = "solaris", target_os = "haiku", target_os = "l4re",
+        target_os = "gnu")))]
         use crate::sys::net::netc::IPV6_DROP_MEMBERSHIP;
     }
 }
@@ -32,6 +48,7 @@ cfg_if::cfg_if! {
 cfg_if::cfg_if! {
     if #[cfg(any(
         target_os = "linux", target_os = "android",
+        target_os = "hurd",
         target_os = "dragonfly", target_os = "freebsd",
         target_os = "openbsd", target_os = "netbsd",
         target_os = "haiku", target_os = "nto"))] {
