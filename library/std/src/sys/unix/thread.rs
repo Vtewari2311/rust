@@ -213,7 +213,8 @@ impl Thread {
         target_os = "l4re",
         target_os = "emscripten",
         target_os = "redox",
-        target_os = "vxworks"
+        target_os = "vxworks",
+        target_os = "hurd",
     ))]
     pub fn set_name(_name: &CStr) {
         // Newlib, Emscripten, and VxWorks have no way to set a thread name.
@@ -305,6 +306,7 @@ pub fn available_parallelism() -> io::Result<NonZeroUsize> {
             target_os = "android",
             target_os = "emscripten",
             target_os = "fuchsia",
+            target_os = "hurd",
             target_os = "ios",
             target_os = "tvos",
             target_os = "linux",
@@ -686,6 +688,7 @@ mod cgroups {
 #[cfg(all(
     not(target_os = "linux"),
     not(target_os = "freebsd"),
+    not(target_os = "hurd"),
     not(target_os = "macos"),
     not(target_os = "netbsd"),
     not(target_os = "openbsd"),
@@ -706,6 +709,7 @@ pub mod guard {
 #[cfg(any(
     target_os = "linux",
     target_os = "freebsd",
+    target_os = "hurd",
     target_os = "macos",
     target_os = "netbsd",
     target_os = "openbsd",
@@ -762,6 +766,7 @@ pub mod guard {
     #[cfg(any(
         target_os = "android",
         target_os = "freebsd",
+        target_os = "hurd",
         target_os = "linux",
         target_os = "netbsd",
         target_os = "l4re"
@@ -899,6 +904,7 @@ pub mod guard {
     #[cfg(any(
         target_os = "android",
         target_os = "freebsd",
+        target_os = "hurd",
         target_os = "linux",
         target_os = "netbsd",
         target_os = "l4re"
@@ -930,7 +936,7 @@ pub mod guard {
             assert_eq!(libc::pthread_attr_getstack(&attr, &mut stackptr, &mut size), 0);
 
             let stackaddr = stackptr.addr();
-            ret = if cfg!(any(target_os = "freebsd", target_os = "netbsd")) {
+            ret = if cfg!(any(target_os = "freebsd", target_os = "netbsd", target_os = "hurd")) {
                 Some(stackaddr - guardsize..stackaddr)
             } else if cfg!(all(target_os = "linux", target_env = "musl")) {
                 Some(stackaddr - guardsize..stackaddr)
