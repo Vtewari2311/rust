@@ -43,7 +43,7 @@ rustc_target = { path = "../rustc_target" }
 rustc_session = { path = "../rustc_session" }
 
 [target.'cfg(unix)'.dependencies]
-libc = "0.2.50"
+libc = { path = "../../../libc" }
 
 [dependencies.object]
 version = "0.31.1"

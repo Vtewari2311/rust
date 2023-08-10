@@ -144,6 +144,8 @@ pub(crate) mod tvos;
 pub mod vita;
 #[cfg(target_os = "vxworks")]
 pub mod vxworks;
+#[cfg(target_os = "hurd")]
+pub mod hurd;
 #[cfg(target_os = "watchos")]
 pub(crate) mod watchos;
 

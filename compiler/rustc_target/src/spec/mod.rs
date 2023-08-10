@@ -69,6 +69,8 @@ mod freebsd_base;
 mod fuchsia_base;
 mod haiku_base;
 mod hermit_base;
+mod hurd_base;
+mod hurd_gnu_base;
 mod illumos_base;
 mod l4re_base;
 mod linux_base;
@@ -1237,6 +1239,7 @@ macro_rules! supported_targets {
 }
 
 supported_targets! {
+    ("i686-unknown-hurd-gnu", i686_unknown_hurd_gnu),
     ("x86_64-unknown-linux-gnu", x86_64_unknown_linux_gnu),
     ("x86_64-unknown-linux-gnux32", x86_64_unknown_linux_gnux32),
     ("i686-unknown-linux-gnu", i686_unknown_linux_gnu),
