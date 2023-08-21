@@ -53,10 +53,10 @@ pub trait MetadataExt {
     fn st_ctime(&self) -> i64;
     #[stable(feature = "metadata_ext2", since = "1.8.0")]
     fn st_ctime_nsec(&self) -> i64;
-    #[stable(feature = "metadata_ext2", since = "1.8.0")]
-    fn st_birthtime(&self) -> i64;
-    #[stable(feature = "metadata_ext2", since = "1.8.0")]
-    fn st_birthtime_nsec(&self) -> i64;
+    //#[stable(feature = "metadata_ext2", since = "1.8.0")]
+    //fn st_birthtime(&self) -> i64;
+    //#[stable(feature = "metadata_ext2", since = "1.8.0")]
+    //fn st_birthtime_nsec(&self) -> i64;
     #[stable(feature = "metadata_ext2", since = "1.8.0")]
     fn st_blksize(&self) -> u64;
     #[stable(feature = "metadata_ext2", since = "1.8.0")]
@@ -74,7 +74,8 @@ impl MetadataExt for Metadata {
         unsafe { &*(self.as_inner().as_inner() as *const libc::stat as *const raw::stat) }
     }
     fn st_dev(&self) -> u64 {
-        self.as_inner().as_inner().st_dev as u64
+        // self.as_inner().as_inner().st_dev as u64
+        self.as_inner().as_inner().st_fsid as u64
     }
     fn st_ino(&self) -> u64 {
         self.as_inner().as_inner().st_ino as u64
@@ -113,14 +114,17 @@ impl MetadataExt for Metadata {
         self.as_inner().as_inner().st_ctime as i64
     }
     fn st_ctime_nsec(&self) -> i64 {
-        self.as_inner().as_inner().st_ctimensec as i64
-    }
+        // self.as_inner().as_inner().st_ctimensec as i64
+        self.as_inner().as_inner().st_ctim.tv_nsec as i64
+    } 
+    /*
     fn st_birthtime(&self) -> i64 {
         self.as_inner().as_inner().st_birthtime as i64
     }
     fn st_birthtime_nsec(&self) -> i64 {
         self.as_inner().as_inner().st_birthtimensec as i64
     }
+    */
     fn st_blksize(&self) -> u64 {
         self.as_inner().as_inner().st_blksize as u64
     }
