@@ -213,7 +213,8 @@ impl Thread {
         target_os = "l4re",
         target_os = "emscripten",
         target_os = "redox",
-        target_os = "vxworks"
+        target_os = "vxworks",
+        target_os = "hurd",
     ))]
     pub fn set_name(_name: &CStr) {
         // Newlib, Emscripten, and VxWorks have no way to set a thread name.

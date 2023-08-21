@@ -90,13 +90,14 @@ use libc::{
     target_os = "linux",
     target_os = "emscripten",
     target_os = "l4re",
-    target_os = "android"
+    target_os = "android",
+    target_os = "hurd"
 )))]
 use libc::{
     dirent as dirent64, fstat as fstat64, ftruncate as ftruncate64, lseek as lseek64,
     lstat as lstat64, off_t as off64_t, open as open64, stat as stat64,
 };
-#[cfg(any(target_os = "linux", target_os = "emscripten", target_os = "l4re"))]
+#[cfg(any(target_os = "linux", target_os = "emscripten", target_os = "l4re", target_os = "hurd"))]
 use libc::{dirent64, fstat64, ftruncate64, lseek64, lstat64, off64_t, open64, stat64};
 
 pub use crate::sys_common::fs::try_exists;
@@ -466,7 +467,8 @@ impl FileAttr {
         target_os = "vxworks",
         target_os = "espidf",
         target_os = "horizon",
-        target_os = "vita"
+        target_os = "vita",
+        target_os = "hurd"
     )))]
     pub fn modified(&self) -> io::Result<SystemTime> {
         #[cfg(target_pointer_width = "32")]
@@ -489,11 +491,17 @@ impl FileAttr {
         Ok(SystemTime::from(self.stat.st_mtim))
     }
 
+    #[cfg(target_os = "hurd")]
+    pub fn modified(&self) -> io::Result<SystemTime> {
+        Ok(SystemTime::new(self.stat.st_mtim.tv_sec as i64, self.stat.st_mtim.tv_nsec as i64))
+    }
+
     #[cfg(not(any(
         target_os = "vxworks",
         target_os = "espidf",
         target_os = "horizon",
-        target_os = "vita"
+        target_os = "vita",
+        target_os = "hurd"
     )))]
     pub fn accessed(&self) -> io::Result<SystemTime> {
         #[cfg(target_pointer_width = "32")]
@@ -512,6 +520,11 @@ impl FileAttr {
     }
 
     #[cfg(target_os = "horizon")]
+    pub fn accessed(&self) -> io::Result<SystemTime> {
+        Ok(SystemTime::from(self.stat.st_atim))
+    }
+
+    #[cfg(target_os = "hurd")]
     pub fn accessed(&self) -> io::Result<SystemTime> {
         Ok(SystemTime::from(self.stat.st_atim))
     }
@@ -915,6 +928,7 @@ impl DirEntry {
         target_os = "horizon",
         target_os = "vita",
         target_os = "nto",
+        target_os = "hurd",
     ))]
     pub fn ino(&self) -> u64 {
         self.entry.d_ino as u64
