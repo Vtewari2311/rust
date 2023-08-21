@@ -16,6 +16,7 @@ use crate::mem;
     target_os = "illumos",
     target_os = "nto",
     target_os = "vita",
+    target_os = "hurd"
 ))]
 use crate::mem::MaybeUninit;
 use crate::os::unix::io::{AsFd, AsRawFd, BorrowedFd, FromRawFd, IntoRawFd};
@@ -64,7 +65,7 @@ use libc::fstatat64;
     target_os = "vita",
 ))]
 use libc::readdir as readdir64;
-#[cfg(target_os = "linux")]
+#[cfg(any(target_os = "linux", target_os = "hurd"))]
 use libc::readdir64;
 #[cfg(any(target_os = "emscripten", target_os = "l4re"))]
 use libc::readdir64_r;
@@ -79,6 +80,7 @@ use libc::readdir64_r;
     target_os = "redox",
     target_os = "nto",
     target_os = "vita",
+    target_os = "hurd"
 )))]
 use libc::readdir_r as readdir64_r;
 #[cfg(target_os = "android")]
@@ -289,7 +291,8 @@ unsafe impl Sync for Dir {}
     target_os = "fuchsia",
     target_os = "redox",
     target_os = "nto",
-    target_os = "vita"
+    target_os = "vita",
+    target_os = "hurd"
 ))]
 pub struct DirEntry {
     dir: Arc<InnerReadDir>,
@@ -312,6 +315,7 @@ pub struct DirEntry {
     target_os = "redox",
     target_os = "nto",
     target_os = "vita",
+    target_os = "hurd"
 ))]
 struct dirent64_min {
     d_ino: u64,
@@ -333,6 +337,7 @@ struct dirent64_min {
     target_os = "redox",
     target_os = "nto",
     target_os = "vita",
+    target_os = "hurd"
 )))]
 pub struct DirEntry {
     dir: Arc<InnerReadDir>,
@@ -486,15 +491,17 @@ impl FileAttr {
         Ok(SystemTime::new(self.stat.st_mtime as i64, 0))
     }
 
-    #[cfg(target_os = "horizon")]
+    #[cfg(any(target_os = "horizon", target_os = "hurd"))]
     pub fn modified(&self) -> io::Result<SystemTime> {
         Ok(SystemTime::from(self.stat.st_mtim))
     }
 
+    /*
     #[cfg(target_os = "hurd")]
     pub fn modified(&self) -> io::Result<SystemTime> {
         Ok(SystemTime::new(self.stat.st_mtim.tv_sec as i64, self.stat.st_mtim.tv_nsec as i64))
     }
+    */
 
     #[cfg(not(any(
         target_os = "vxworks",
@@ -519,15 +526,17 @@ impl FileAttr {
         Ok(SystemTime::new(self.stat.st_atime as i64, 0))
     }
 
-    #[cfg(target_os = "horizon")]
+    #[cfg(any(target_os = "horizon", target_os = "hurd"))]
     pub fn accessed(&self) -> io::Result<SystemTime> {
         Ok(SystemTime::from(self.stat.st_atim))
     }
 
+    /*
     #[cfg(target_os = "hurd")]
     pub fn accessed(&self) -> io::Result<SystemTime> {
         Ok(SystemTime::from(self.stat.st_atim))
     }
+    */
 
     #[cfg(any(
         target_os = "freebsd",
@@ -680,6 +689,7 @@ impl Iterator for ReadDir {
         target_os = "illumos",
         target_os = "nto",
         target_os = "vita",
+        target_os = "hurd"
     ))]
     fn next(&mut self) -> Option<io::Result<DirEntry>> {
         if self.end_of_stream {
@@ -792,6 +802,7 @@ impl Iterator for ReadDir {
         target_os = "illumos",
         target_os = "nto",
         target_os = "vita",
+        target_os = "hurd"
     )))]
     fn next(&mut self) -> Option<io::Result<DirEntry>> {
         if self.end_of_stream {
@@ -986,6 +997,7 @@ impl DirEntry {
         target_os = "redox",
         target_os = "nto",
         target_os = "vita",
+        target_os = "hurd"
     )))]
     fn name_cstr(&self) -> &CStr {
         unsafe { CStr::from_ptr(self.entry.d_name.as_ptr()) }
@@ -999,6 +1011,7 @@ impl DirEntry {
         target_os = "redox",
         target_os = "nto",
         target_os = "vita",
+        target_os = "hurd"
     ))]
     fn name_cstr(&self) -> &CStr {
         &self.name
