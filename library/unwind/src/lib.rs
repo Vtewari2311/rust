@@ -147,3 +147,8 @@ extern "C" {}
 #[cfg(target_os = "nto")]
 #[link(name = "gcc_s")]
 extern "C" {}
+
+#[cfg(target_os = "hurd")]
+#[link(name = "gcc_s")]
+extern "C" {}
+
