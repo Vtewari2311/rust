@@ -3,7 +3,9 @@
 	url = https://github.com/rust-lang/nomicon.git
 [submodule "src/tools/cargo"]
 	path = src/tools/cargo
-	url = https://github.com/rust-lang/cargo.git
+	url = https://github.com/sthibaul/cargo.git
+	branch = hack
+	shallow = true
 [submodule "src/doc/reference"]
 	path = src/doc/reference
 	url = https://github.com/rust-lang/reference.git
@@ -31,4 +33,5 @@
 	url = https://github.com/rust-embedded/book.git
 [submodule "library/backtrace"]
 	path = library/backtrace
-	url = https://github.com/rust-lang/backtrace-rs.git
+	url = https://github.com/sthibaul/backtrace-rs.git
+	shallow = true

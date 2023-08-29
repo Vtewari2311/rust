@@ -10,4 +10,4 @@ crate-type = ["dylib"]
 rustc_driver_impl = { path = "../rustc_driver_impl" }
 # FIXME(Nilstrieb): 0.37.12 adds eventfd support for FreeBSD,
 # but FreeBSD 12 does not support it: https://github.com/bytecodealliance/rustix/issues/716
-rustix = "=0.37.11"
+rustix = "0.37.11"

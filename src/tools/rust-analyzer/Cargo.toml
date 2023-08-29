@@ -40,6 +40,11 @@ debug = 0
 
 # salsa = { path = "../salsa" }
 
+libc = {path = '../../../../libc'}
+libloading = {path = '../../../../rust_libloading-0.8.0'}
+nix = {path = '../../../../nix'}
+
+
 [workspace.dependencies]
 # local crates
 base-db = { path = "./crates/base-db", version = "0.0.0" }
